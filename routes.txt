@@ -1,0 +1,8 @@
+ ------------------- -------- -------- ------ --------------------------------- 
+  Name                Method   Scheme   Host   Path                             
+ ------------------- -------- -------- ------ --------------------------------- 
+  homepage            ANY      ANY      ANY    /                                
+  app_default_test    ANY      ANY      ANY    /test                            
+  app_default_hello   ANY      ANY      ANY    /hello/{age}/{name}/{firstName}  
+ ------------------- -------- -------- ------ --------------------------------- 
+
