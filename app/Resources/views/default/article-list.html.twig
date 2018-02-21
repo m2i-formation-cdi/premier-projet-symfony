@@ -14,7 +14,11 @@
                         {{ article.title }}
                     </a>
                 </td>
-                <td>{{  article.category }}</td>
+                <td>
+                    <a href="{{ path('article_list', {page:1, categoryName:article.category.name}) }}">
+                    {{  article.category.name }}
+                    </a>
+                </td>
                 <td><a href="{{ path('article_delete', {id:article.id}) }}">Supprimer</a> </td>
             </tr>
         {% else %}
@@ -25,7 +29,7 @@
     <ul class="pagination">
         {% for pageNumber in 1..nbPages %}
             <li class="page-item {{ currentPage==pageNumber?'active':'' }}">
-                <a href="{{ path('article_list', {page:pageNumber, category:category}) }}" class="page-link">
+                <a href="{{ path('article_list', {page:pageNumber, categoryName:category}) }}" class="page-link">
                     {{ pageNumber }}
                 </a>
             </li>

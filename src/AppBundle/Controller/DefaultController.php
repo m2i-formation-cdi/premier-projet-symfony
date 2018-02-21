@@ -97,18 +97,20 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/article-list/page-{page}/{category}",
-     *     defaults={"category"="all", "page"=1}, requirements={"page"="\d+"},
+     * @Route("/article-list/page-{page}/{categoryName}",
+     *     defaults={"categoryName"="all", "page"=1}, requirements={"page"="\d+"},
      *     name="article_list")
      */
-    public function showArticlesAction($category, $page){
+    public function showArticlesAction($categoryName, $page){
         $repository = $this->getDoctrine()->getRepository("AppBundle:Article");
 
-        $nbArticlePerPage = 2;
+        $nbArticlePerPage = 10;
 
-        if($category == 'all'){
+        if($categoryName == 'all'){
             $articleList = $repository->findBy([],['category' => 'ASC']);
         } else {
+            $categoryRepository = $this->getDoctrine()->getRepository("AppBundle:Category");
+            $category = $categoryRepository->findByName($categoryName);
             $articleList = $repository->findByCategory($category, ['category' => 'ASC']);
         }
 
@@ -122,7 +124,7 @@ class DefaultController extends Controller
                 "articleList" => $articleList,
                 "nbPages" => $nbPages,
                 "currentPage" => $page,
-                "category"=> $category
+                "category"=> $categoryName
             ]
         );
     }

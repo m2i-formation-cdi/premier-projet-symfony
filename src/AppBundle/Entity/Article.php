@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Article
@@ -27,6 +28,12 @@ class Article
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255)
+     * @Assert\NotBlank(message="Le titre ne peut être vide")
+     * @Assert\Length(
+     *     min="3", max="255",
+     *     minMessage="Le titre doit faire au moins {{ limit }} caractères",
+     *     maxMessage="Le titre ne peut dépasser {{ limit }} caractère"
+     * )
      */
     private $title;
 
@@ -50,12 +57,18 @@ class Article
     /**
      * @var Author
      * @ORM\ManyToOne(targetEntity="Author", inversedBy="articles")
+     * @Assert\Valid()
      */
     private $author;
 
     /**
      * @var ArrayCollection
      * @ORM\ManyToMany(targetEntity="Tag", cascade={"persist"})
+     * @Assert\Count(
+     *     min="1", max="5",
+     *     minMessage="Au moins {{ limit }} tag",
+     *     maxMessage="Au plus {{ limit }} tags"
+     * )
      */
     private $tags;
 
@@ -68,17 +81,11 @@ class Article
 
     /**
      * Article constructor.
-     * @param string $title
-     * @param Category $category
-     * @param bool $validated
      */
-    public function __construct($title, $category, $validated)
+    public function __construct()
     {
-        $this->title = $title;
-        $this->category = $category;
-        $this->validated = $validated;
+        $this->tags = new ArrayCollection();
     }
-
 
     /**
      * Get id
@@ -246,4 +253,16 @@ class Article
     public function preUpdateEvent(){
         $this->updatedAt = new \DateTime();
     }
+
+    /**
+     * @param \DateTime $createdAt
+     * @return Article
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+        return $this;
+    }
+
+
 }
